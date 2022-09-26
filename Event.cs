@@ -4,7 +4,7 @@ public class Event
 {
     public string Title { get; set; }
     public DateTime Date { get; set; }
-    public int MaxOccupancy { get; set; }
+    public int MaxOccupancy { get; private set; }
     public int ReservedSeats { get; private set; }
 
     public Event(string title, DateTime date, int maxOccupancy)
