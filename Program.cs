@@ -13,114 +13,118 @@ do
     Console.WriteLine(Environment.NewLine);
     Console.WriteLine("Insert 'event' for add a single event");
     Console.WriteLine("Insert 'program' for add a program of events");
-    Console.WriteLine("Insert 'manage booking' for manage booking of an event");
+    Console.WriteLine("Insert 'booking' for manage booking of an event");
     Console.WriteLine("Insert 'search' for search event by date");
     Console.WriteLine("Insert 'empty' for delete all events");
     Console.WriteLine("Insert 'stop' for terminate the process");
     Console.WriteLine(Environment.NewLine);
     userInput = Console.ReadLine();
 
-    if (userInput == "event")
+    switch (userInput)
     {
-        try
-        {
-            Console.Clear();
-            Console.WriteLine(Environment.NewLine);
-            addEvent();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine($"Error: {e.Message}");
-        }
-    }
-
-    else if (userInput == "manage booking")
-    {
-        Console.Clear();
-
-        Console.WriteLine("****Enter event's name****");
-
-        string eventTitle = Console.ReadLine();
-
-        bool found = false;
-
-        foreach (Event singleEvent in events)
-        {
-            if (singleEvent.Title == eventTitle)
+        case "event":
+            try
             {
-                found = true;
-                string input;
-                do
-                {
-                    Console.WriteLine(Environment.NewLine);
-                    Console.WriteLine("Insert 'book seats' for add a event");
-                    Console.WriteLine("Insert 'cancel seats' for modify user data");
-                    Console.WriteLine("Insert 'end' for terminate the process");
-                    input = Console.ReadLine();
-
-                    if (input == "book seats")
-                    {
-                        try
-                        {
-                            Console.Clear();
-                            Console.WriteLine(Environment.NewLine);
-                            Console.WriteLine("****How many seats do you want to book?****");
-                            int numberSeats = Convert.ToInt32(Console.ReadLine());
-                            singleEvent.PrenotaPosti(numberSeats);
-                            Console.WriteLine($"****Remaining places: {singleEvent.GetAvailableSeats()}****");
-                        }
-                        catch(Exception e)
-                        {
-                            Console.WriteLine(Environment.NewLine);
-                            Console.WriteLine($"****Error: {e.Message}****");
-                        }
-                    }
-                    if (input == "cancel seats")
-                    {
-                        try
-                        {
-                            Console.Clear();
-                            Console.WriteLine(Environment.NewLine);
-                            Console.WriteLine("****How many places do you want to cancel?****");
-                            int numberSeats = Convert.ToInt32(Console.ReadLine());
-                            singleEvent.DisdiciPosti(numberSeats);
-                            Console.WriteLine($"Remaining places: {singleEvent.GetAvailableSeats()}");
-                        }
-                        catch(Exception e)
-                        {
-                            Console.WriteLine(Environment.NewLine);
-                            Console.WriteLine($"****Error: {e.Message}****");
-                        }
-                    }
-
-                } while (input != "end");
+                Console.Clear();
+                Console.WriteLine(Environment.NewLine);
+                addEvent();
             }
-        }
+            catch (Exception e)
+            {
+                Console.WriteLine(Environment.NewLine);
+                Console.WriteLine($"Error: {e.Message}");
+            }
+            break;
 
-        if (found == false)
-        {
-            Console.WriteLine("Event not found");
-        }
-    }
-    else if (userInput == "program")
-    {
-        Console.Clear();
+        case "program":
+            
+            Console.Clear();
+            CreaProgrammaEventi();
+            
+            break;
 
-        CreaProgrammaEventi();
-    }
-    else if (userInput == "search")
-    {
-        Console.Clear();
+        case "booking":
+            Console.Clear();
 
-        SearchEventByDate();
-    }
-    else if (userInput == "empty")
-    {
-        Console.Clear();
+            Console.WriteLine("****Enter event's name****");
 
-        EmptyListEvent();
-    }
+            string eventTitle = Console.ReadLine();
+
+            bool found = false;
+
+            foreach (Event singleEvent in events)
+            {
+                if (singleEvent.Title == eventTitle)
+                {
+                    found = true;
+                    string input;
+                    do
+                    {
+                        Console.WriteLine(Environment.NewLine);
+                        Console.WriteLine("Insert 'book' for booking seats");
+                        Console.WriteLine("Insert 'cancel' for cancel booked seats");
+                        Console.WriteLine("Insert 'end' for terminate the process");
+                        input = Console.ReadLine();
+
+                        switch (input)
+                        {
+                            case "book":
+                                try
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(Environment.NewLine);
+                                    Console.WriteLine("****How many seats do you want to book?****");
+                                    int numberSeats = Convert.ToInt32(Console.ReadLine());
+                                    singleEvent.PrenotaPosti(numberSeats);
+                                    Console.WriteLine($"****Remaining places: {singleEvent.GetAvailableSeats()}****");
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(Environment.NewLine);
+                                    Console.WriteLine($"****Error: {e.Message}****");
+                                }
+                                break;
+
+                            case "cancel":
+                                try
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine(Environment.NewLine);
+                                    Console.WriteLine("****How many places do you want to cancel?****");
+                                    int numberSeats = Convert.ToInt32(Console.ReadLine());
+                                    singleEvent.DisdiciPosti(numberSeats);
+                                    Console.WriteLine($"Remaining places: {singleEvent.GetAvailableSeats()}");
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(Environment.NewLine);
+                                    Console.WriteLine($"****Error: {e.Message}****");
+                                }
+                                break;
+                        }
+
+                    } while (input != "end");
+                }
+            }
+
+            if (found == false)
+            {
+                Console.WriteLine("Event not found");
+            }
+            break;
+
+        case "search":
+            Console.Clear();
+
+            SearchEventByDate();
+            break;
+
+        case "empty":
+            Console.Clear();
+
+            EmptyListEvent();
+            break;
+    };
 
 } while (userInput != "stop");
 
