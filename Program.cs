@@ -3,26 +3,28 @@
 using System;
 
 List<Event> events = new List<Event>();
-List<ProgramEvents> programEvents = new List<ProgramEvents>();
 
 string userInput;
 
+Console.WriteLine("****Welcome****");
+
 do
 {
-    Console.WriteLine("****Welcome****");
-
-    Console.WriteLine("Insert 'add single' for add a single event");
-    Console.WriteLine("Insert 'add group' for add a group of events");
+    Console.WriteLine(Environment.NewLine);
+    Console.WriteLine("Insert 'event' for add a single event");
+    Console.WriteLine("Insert 'program' for add a program of events");
     Console.WriteLine("Insert 'manage booking' for manage booking of an event");
     Console.WriteLine("Insert 'search' for search event by date");
     Console.WriteLine("Insert 'empty' for delete all events");
     Console.WriteLine("Insert 'stop' for terminate the process");
+    Console.WriteLine(Environment.NewLine);
     userInput = Console.ReadLine();
 
-    if (userInput == "add single")
+    if (userInput == "event")
     {
         try
         {
+            Console.Clear();
             Console.WriteLine(Environment.NewLine);
             addEvent();
         }
@@ -35,6 +37,8 @@ do
 
     else if (userInput == "manage booking")
     {
+        Console.Clear();
+
         Console.WriteLine("****Enter event's name****");
 
         string eventTitle = Console.ReadLine();
@@ -59,22 +63,24 @@ do
                     {
                         try
                         {
+                            Console.Clear();
                             Console.WriteLine(Environment.NewLine);
                             Console.WriteLine("****How many seats do you want to book?****");
                             int numberSeats = Convert.ToInt32(Console.ReadLine());
                             singleEvent.PrenotaPosti(numberSeats);
-                            Console.WriteLine($"Remaining places: {singleEvent.GetAvailableSeats()}");
+                            Console.WriteLine($"****Remaining places: {singleEvent.GetAvailableSeats()}****");
                         }
                         catch(Exception e)
                         {
                             Console.WriteLine(Environment.NewLine);
-                            Console.WriteLine($"Error: {e.Message}");
+                            Console.WriteLine($"****Error: {e.Message}****");
                         }
                     }
                     if (input == "cancel seats")
                     {
                         try
                         {
+                            Console.Clear();
                             Console.WriteLine(Environment.NewLine);
                             Console.WriteLine("****How many places do you want to cancel?****");
                             int numberSeats = Convert.ToInt32(Console.ReadLine());
@@ -84,7 +90,7 @@ do
                         catch(Exception e)
                         {
                             Console.WriteLine(Environment.NewLine);
-                            Console.WriteLine($"Error: {e.Message}");
+                            Console.WriteLine($"****Error: {e.Message}****");
                         }
                     }
 
@@ -97,16 +103,22 @@ do
             Console.WriteLine("Event not found");
         }
     }
-    else if (userInput == "add group")
+    else if (userInput == "program")
     {
+        Console.Clear();
+
         CreaProgrammaEventi();
     }
     else if (userInput == "search")
     {
+        Console.Clear();
+
         SearchEventByDate();
     }
     else if (userInput == "empty")
     {
+        Console.Clear();
+
         EmptyListEvent();
     }
 
@@ -144,24 +156,35 @@ Event addEvent()
 
 void CreaProgrammaEventi()
 {
-    Console.WriteLine("Inserire il titolo del nuovo programma eventi: ");
-    string titolo = Console.ReadLine();
+    Console.WriteLine(Environment.NewLine);
+    Console.Write("Enter the title of the event program: ");
+    string tempTitle = Console.ReadLine();
 
-    ProgramEvents programmaEventi = new ProgramEvents(titolo);
+    ProgramEvents programmaEventi = new ProgramEvents(tempTitle);
 
-    Console.WriteLine("Quanti eventi inserire nel programma?");
-    int numeroEventi = Int32.Parse(Console.ReadLine());
-
-
-    for (int i = 0; i < numeroEventi; i++)
+    Console.Write("Enter how many events you want to include in the program: ");
+    int tempNumber = Int32.Parse(Console.ReadLine());
+    try
     {
-        Event nuovoEvento = addEvent();
-        if (nuovoEvento == null)
+        for (int i = 0; i < tempNumber; i++)
         {
-            throw new Exception("Attenzione è stato generato un evento nullo");
+            Event newEvent = addEvent();
+            if (newEvent == null)
+            {
+                throw new Exception("**** Attention a null event has been generated *****");
+            }
+
+            programmaEventi.AddEvent(newEvent);
         }
-        programEvents.Add(programmaEventi);
     }
+    catch (Exception e)
+    {
+        Console.WriteLine(Environment.NewLine);
+        Console.WriteLine($"****Error: {e.Message}****");
+    }
+
+    Console.WriteLine(ProgramEvents.GetEventsList(programmaEventi.Events));
+
 }
 
 //Metodo per cercare gli eventi tramite la data 
@@ -169,7 +192,7 @@ void CreaProgrammaEventi()
 void SearchEventByDate()
 {
     List<Event> tempEvents = new List<Event>();
-    Console.WriteLine("Inserire data per cercare eventi: ");
+    Console.WriteLine("****Enter date to search for events: ****");
     string SDate = Console.ReadLine();
     DateTime date = Convert.ToDateTime(SDate);
 
@@ -180,10 +203,10 @@ void SearchEventByDate()
             tempEvents.Add(evento);
         }
     }
-    Console.WriteLine($"Gli eventi presenti in data {date} sono:");
+    Console.WriteLine($"****The events on date {date} are: ****");
     foreach (Event evento in tempEvents)
     {
-        Console.WriteLine($"Nome Evento: {evento.Title}");
+        Console.WriteLine($"Event's name: {evento.Title}");
     }
 }
 
@@ -193,7 +216,7 @@ void StampEventsList()
 {
     foreach (Event eventItem in events)
     {
-        Console.WriteLine($"Event: {eventItem.ToString()}");
+        Console.WriteLine($"****Event: {eventItem.ToString()}****");
     }
 }
 
@@ -201,7 +224,7 @@ void StampEventsList()
 
 void CountEvents()
 {
-    Console.WriteLine("Numero eventi in programma: " + events.Count());
+    Console.WriteLine($"****Number of scheduled events: {events.Count()}****");
 }
 
 //Metodo per azzerare la lista degli event  
@@ -210,3 +233,4 @@ void EmptyListEvent()
 {
     events.Clear();
 }
+

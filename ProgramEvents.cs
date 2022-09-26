@@ -3,7 +3,7 @@
 public class ProgramEvents
 {
     public string Title { get; set; }
-    public List<Event> Events { get; set; }
+    public List<Event> Events { get; private set; }
 
     public ProgramEvents(string title)
     {
@@ -11,17 +11,30 @@ public class ProgramEvents
         Events = new List<Event>();
     }
 
-    //string ShowProgramEvents()
-    //{
-    //    Console.WriteLine("Inserire il titolo del programma eventi: ");
-    //    string titolo = Console.ReadLine();
+    public void AddEvent(Event tempEvent)
+    {
+        Events.Add(tempEvent);
+    }
 
-    //    string program = "Nome programma eventi" + Title;
-    //    foreach (Event evento in Events)
-    //    {
-    //        program += evento.ToString();
-    //    }
-    //    return program;
-    //}
+    public static string GetEventsList(List<Event> list)
+    {
+        string events = "";
+        if (list.Count >= 0)
+        {
+            events += "****Ecco tutti gli eventi: ****\n";
+            int count = 0;
+            foreach (Event e in list)
+            {
+                ++count;
+                events += $"Event n.{count}: {e.ToString()}; \n";
+            }
+        }
+        else
+        {
+            events = "Nessun evento programmato";
+        }
+        return events;
+
+    }
 
 }
